@@ -1,0 +1,22 @@
+- name: Install and Configure GitLab Runner
+  hosts: vm1
+  become: true
+
+  tasks:
+    - name: Install GitLab Runner (alternative method)
+      shell: |
+        sudo apt-get install -y curl
+        curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | sudo bash
+        sudo apt-get install -y gitlab-runner
+      args:
+        executable: /bin/bash
+      register: shell_output
+
+    - name: Install GitLab Runner
+      apt:
+        name: gitlab-runner
+        state: present
+
+    - name: Register GitLab Runner
+      command: gitlab-runner register --non-interactive --url "https://gitlab.com/coding-factory2/ansible_tp1" --registration-token "GR1348941btHVbgxCMt7RSMGdz43e" --executor "shell" --description "Your Runner Description" --tag-list "your-tag-list" --run-untagged="true"
+      ignore_errors: true

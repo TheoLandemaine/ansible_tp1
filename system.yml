@@ -1,0 +1,35 @@
+---
+- name: Configuration système de base
+  hosts: vm1
+  become: true
+
+  tasks:
+    - name: Create a new user
+      user:
+        name: esiee
+        state: present
+        shell: /bin/bash
+        groups: sudo
+
+    - name: Déployer les clés SSH des administrateurs à l'utilisateur esiee
+      authorized_key:
+        user: esiee
+        key: "{{ lookup('file', '/Users/landemainetheo/.ssh/id_rsa.pub') }}"
+        state: present
+
+    - name: Autoriser l'utilisateur esiee à effectuer un sudo sans mot de passe
+      lineinfile:
+        path: /etc/sudoers.d/esiee
+        line: "esiee ALL=(ALL) NOPASSWD: ALL"
+        create: yes
+
+    - name: Deploy Message of the Day (motd)
+      template:
+        src: motd.j2
+        dest: /etc/motd
+
+  handlers:
+    - name: Restart SSH
+      service:
+        name: sshd
+        state: restarted
