@@ -1,0 +1,26 @@
+version: "3.4"
+services:
+  theo:
+    image: theolandemaine/website
+    ports:
+      - 8080:80
+
+  guillaume:
+    image: ayakork/mywebsite:v1.0
+    ports:
+      - 8081:80
+
+  rui:
+    image: justrunz/website:v1
+    ports:
+      - 8082:80
+
+  lucas:
+    image: rukasuu/website
+    ports:
+      - 8083:80
+
+  baptiste:
+    image: ptitbapt/my_web_site_test:v1
+    ports:
+      - 8084:80
